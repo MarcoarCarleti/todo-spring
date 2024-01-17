@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import br.com.marcocarleti.todoapplication.tasks.Task;
 
-@Repository
-public interface TaskRepository extends CustomCrudRepository<Task, Integer> {
+public interface TaskRepository extends JpaRepository<Task, Long> {
 
 }
