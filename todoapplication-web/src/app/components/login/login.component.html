@@ -1,0 +1,47 @@
+<main
+  class="d-flex flex-column align-items-center justify-content-center vh-100"
+  style="background-color: #287aea"
+>
+  <div class="d-flex flex-column align-items-center justify-content-center">
+    <img [src]="imageSrc" alt="" style="margin-top: -15rem; width: 20rem" />
+    <form
+      class="d-flex flex-column g-3 gap-3 w-100 justify-content-evenly p-4 bg-white rounded"
+      style="border: 1px solid white; width: 310px; height: 310px"
+    >
+      <div class="d-flex flex-column gap-2">
+        <div class="form-floating mb-3">
+          <input
+            type="email"
+            class="form-control w-100"
+            id="floatingInput"
+            placeholder="name@example.com"
+          />
+          <label for="floatingInput">Email</label>
+        </div>
+        <div class="form-floating">
+          <input
+            type="password"
+            class="form-control w-100"
+            id="floatingPassword"
+            placeholder="Password"
+          />
+          <label for="floatingPassword">Senha</label>
+        </div>
+      </div>
+      <div class="col-auto d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary">Login</button>
+      </div>
+      <div class="d-flex align-items-center flex-column">
+        <span
+          >Não é cadastrado?
+          <a
+            href="/register"
+            class="text-decoration-underline"
+            style="color: #287aea"
+            >Inscreva-se</a
+          ></span
+        >
+      </div>
+    </form>
+  </div>
+</main>
