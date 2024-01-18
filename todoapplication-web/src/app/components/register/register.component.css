@@ -1,0 +1,13 @@
+.top-input {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.mid-input {
+    border-radius: 0;
+}
+
+.password-input {
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 0;
+}
