@@ -3,10 +3,12 @@ package br.com.marcocarleti.todoapplication.tasks.repositories;
 import java.util.Optional;
 
 import org.springframework.data.repository.NoRepositoryBean;
-import org.springframework.data.repository.Repository;
+import org.springframework.http.ResponseEntity;
+
+import br.com.marcocarleti.todoapplication.tasks.entities.Task;
 
 @NoRepositoryBean
-public interface CustomCrudRepository<T, ID> extends Repository<T, ID> {
+public interface CustomCrudRepository<T, ID> {
 	 <S extends T> S save(S entity);
 	  
 	  <S extends T> Iterable<S> saveAll(Iterable<S> entities);
@@ -21,7 +23,7 @@ public interface CustomCrudRepository<T, ID> extends Repository<T, ID> {
 	  
 	  long count();
 	  
-	  void deleteById(Long id);
+	  ResponseEntity<Object> deleteById(Long id);
 	  
 	  void delete(T entity);
 	  
@@ -30,4 +32,7 @@ public interface CustomCrudRepository<T, ID> extends Repository<T, ID> {
 	  void deleteAll(Iterable<? extends T> entities);
 	  
 	  void deleteAll();
+	  
+	ResponseEntity<Task> updateById(Long id, Task updatedTask);
+
 }

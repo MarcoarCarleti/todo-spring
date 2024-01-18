@@ -1,4 +1,4 @@
-package br.com.marcocarleti.todoapplication.tasks;
+package br.com.marcocarleti.todoapplication.tasks.entities;
 
 
 import java.util.UUID;

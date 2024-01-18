@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import br.com.marcocarleti.todoapplication.tasks.Task;
+import br.com.marcocarleti.todoapplication.tasks.entities.Task;
 import br.com.marcocarleti.todoapplication.tasks.repositories.TaskRepository;
 
 

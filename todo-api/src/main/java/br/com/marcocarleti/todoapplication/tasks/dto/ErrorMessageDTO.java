@@ -1,4 +1,4 @@
-package br.com.marcocarleti.todoapplication.tasks.exceptions;
+package br.com.marcocarleti.todoapplication.tasks.dto;
 
 public class ErrorMessageDTO {
 	private String message;

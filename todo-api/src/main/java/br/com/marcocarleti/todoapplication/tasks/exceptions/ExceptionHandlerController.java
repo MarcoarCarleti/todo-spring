@@ -11,6 +11,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import br.com.marcocarleti.todoapplication.tasks.dto.ErrorMessageDTO;
+
 
 @ControllerAdvice
 public class ExceptionHandlerController {
