@@ -14,9 +14,10 @@ import {
   imports: [BouncingLogoComponent, ReactiveFormsModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
+  providers: [JwtService],
 })
 export class RegisterComponent implements OnInit {
-  registerForm!: FormGroup;
+  registerForm: FormGroup | any;
 
   constructor(private service: JwtService, private fb: FormBuilder) {}
 
@@ -45,5 +46,12 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  submitForm() {}
+  submitForm() {
+    console.log(this.registerForm.value);
+    this.service.register(this.registerForm.value).subscribe((response) => {
+      if (response.id != null) {
+        alert('Conta criada ' + response.name);
+      }
+    });
+  }
 }
