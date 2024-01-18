@@ -19,7 +19,7 @@ import br.com.marcocarleti.todoapplication.tasks.services.TaskService;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:4200/*")
+@CrossOrigin(origins = "http://localhost:4200")
 public class TaskController {
 
 	// private final TaskRepository taskRepository;
@@ -33,6 +33,7 @@ public class TaskController {
 	}
 
 	@GetMapping("/tasks/{taskId}")
+
 	public Optional<Task> findTaskById(@PathVariable Long taskId) {
 		return taskService.findById(taskId);
 	}
