@@ -11,6 +11,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ import br.com.marcocarleti.todoapplication.tasks.utils.JwtUtil;
 @RequestMapping(value ="/login", 
 		  consumes = MediaType.APPLICATION_JSON_VALUE, 
 		  produces = MediaType.APPLICATION_JSON_VALUE)
+@CrossOrigin(origins = "http://localhost:4200/*")
 public class LoginController {
 
 	@Autowired
