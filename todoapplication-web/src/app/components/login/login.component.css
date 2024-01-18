@@ -1,0 +1,14 @@
+.form-container {
+    max-width: 350px;
+    padding: 1rem;
+}
+
+.email-input {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.password-input {
+    border-top-right-radius: 0 !important;
+    border-top-left-radius: 0 !important;
+}
