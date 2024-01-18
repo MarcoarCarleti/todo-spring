@@ -11,7 +11,10 @@ export class JwtService {
   constructor(private http: HttpClient) {}
 
   register(signRequest: any): Observable<any> {
-    console.log(JSON.stringify(signRequest));
     return this.http.post(BASE_URL + 'signup', signRequest);
+  }
+
+  login(loginRequest: any): Observable<any> {
+    return this.http.post(BASE_URL + 'login', loginRequest);
   }
 }
