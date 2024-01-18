@@ -1,0 +1,29 @@
+@keyframes float {
+    0% {
+
+        transform: translatey(0px);
+    }
+
+    50% {
+
+        transform: translatey(-20px);
+    }
+
+    100% {
+
+        transform: translatey(0px);
+    }
+}
+
+
+.bouncing {
+    position: absolute;
+}
+
+.bouncing {
+    position: absolute;
+    animation-duration: 2s;
+    animation-name: float;
+    animation-iteration-count: infinite;
+    font-size: 2em;
+}
