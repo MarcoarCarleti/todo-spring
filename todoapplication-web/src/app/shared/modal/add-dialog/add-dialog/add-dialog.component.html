@@ -1,0 +1,41 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">Editar Tarefas</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="bsModalRef.hide()"
+  ></button>
+</div>
+<div class="modal-body">
+  <form
+    class="d-flex flex-column gap-3"
+    action=""
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
+  >
+    <div>
+      <div class="form-floating">
+        <input
+          class="form-control title-input"
+          formControlName="title"
+          id="floatingInput"
+          placeholder="Nome"
+        />
+        <label for="floatingInput">Nome</label>
+      </div>
+
+      <div class="form-floating">
+        <input
+          class="form-control description-input"
+          formControlName="description"
+          id="floatingInput"
+          placeholder="Descrição"
+        />
+        <label for="floatingInput">Descrição</label>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Salvar</button>
+  </form>
+</div>
