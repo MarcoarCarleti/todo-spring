@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { JwtService } from '../../service/jwt.service';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
+import { HeaderComponent } from "../header/header.component";
 
 interface Tasks {
   id: number;
@@ -11,12 +13,12 @@ interface Tasks {
 }
 
 @Component({
-  selector: 'app-dashboard',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css',
-  providers: [JwtService],
+    selector: 'app-dashboard',
+    standalone: true,
+    templateUrl: './dashboard.component.html',
+    styleUrl: './dashboard.component.css',
+    providers: [JwtService],
+    imports: [CommonModule, NgbAccordionModule, HeaderComponent]
 })
 export class DashboardComponent implements OnInit {
   constructor(private service: JwtService) {}
@@ -36,4 +38,8 @@ export class DashboardComponent implements OnInit {
       this.tasks = res;
     });
   }
+
+  // openAccordion() {
+  //   this.button.coll
+  // }
 }

@@ -1,23 +1,20 @@
-<!-- <div *ngFor="let task of tasks">{{ task.title }}</div> -->
-<div class="accordion" id="accordionExample">
-  <div class="accordion-item">
-    <h2 class="accordion-header">
-      <button
-        class="accordion-button"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#collapseOne"
-        aria-expanded="true"
-        aria-controls="collapseOne"
-      ></button>
-    </h2>
-    <div
-      id="collapseOne"
-      class="accordion-collapse collapse show"
-      data-bs-parent="#accordionExample"
-    >
-      <div class="accordion-body" *ngFor="let task of tasks">
-        <strong>{{ task.title }}</strong>
+<div class="d-flex justify-content-center flex-column align-items-center">
+  <app-header></app-header>
+
+  <div
+    ngbAccordion
+    style="width: 55rem"
+    *ngFor="let task of tasks"
+    class="accordion-wrapper"
+  >
+    <div ngbAccordionItem>
+      <h2 ngbAccordionHeader>
+        <button ngbAccordionButton>{{ task.title }}</button>
+      </h2>
+      <div ngbAccordionCollapse>
+        <div ngbAccordionBody>
+          <ng-template>{{ task.description }}</ng-template>
+        </div>
       </div>
     </div>
   </div>
