@@ -10,8 +10,6 @@ import { Router } from '@angular/router';
 import { BouncingLogoComponent } from '../bouncing-logo/bouncing-logo.component';
 import { JwtService } from '../../service/jwt.service';
 
-
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -22,7 +20,6 @@ import { JwtService } from '../../service/jwt.service';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup | any;
-  
 
   constructor(
     private service: JwtService,
@@ -39,10 +36,13 @@ export class LoginComponent implements OnInit {
 
   submitForm() {
     console.log(this.loginForm.value);
+    console.log(this.service.login(this.loginForm.value));
     this.service.login(this.loginForm.value).subscribe((response) => {
       if (response.jwt != null) {
-        alert('Hello, your token is ' + response.jwt);
+        console.log;
         const jwtToken = response.jwt;
+        const userEmail = this.loginForm.value.email;
+        localStorage.setItem('email', userEmail);
         localStorage.setItem('jwt', jwtToken);
         this.router.navigateByUrl('/app');
       }

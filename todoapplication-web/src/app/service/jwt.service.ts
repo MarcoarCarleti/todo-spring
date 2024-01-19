@@ -19,7 +19,9 @@ export class JwtService {
   }
 
   task(): Observable<any> {
-    return this.http.get(BASE_URL + 'api/tasks', {
+    const costumerEmail = localStorage.getItem('email');
+
+    return this.http.get(BASE_URL + `api/tasks/${costumerEmail}`, {
       headers: this.createAuthorizationHeader(),
     });
   }
