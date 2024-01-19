@@ -1,19 +1,77 @@
-<div class="d-flex justify-content-center flex-column align-items-center">
-  <app-header></app-header>
+<div class="d-flex justify-content-center align-items-center flex-column">
+  <div class="position-absolute" style="top: 7rem">
+    <app-header></app-header>
+    <div class="d-flex flex-row gap-2">
+      <h3 class="pb-3" style="width: fit-content">Minhas Tasks</h3>
+      <div
+        class="bg-primary rounded d-flex align-items-center justify-content-center icon edit"
+        (click)="handleAddClick()"
+      >
+        <mat-icon>add</mat-icon>
+      </div>
+    </div>
 
-  <div
-    ngbAccordion
-    style="width: 55rem"
-    *ngFor="let task of tasks"
-    class="accordion-wrapper"
-  >
-    <div ngbAccordionItem>
-      <h2 ngbAccordionHeader>
-        <button ngbAccordionButton>{{ task.title }}</button>
-      </h2>
-      <div ngbAccordionCollapse>
-        <div ngbAccordionBody>
-          <ng-template>{{ task.description }}</ng-template>
+    <div class="d-flex flex-column-reverse">
+      <div ngbAccordion *ngFor="let task of tasks" class="accordion-b">
+        <div ngbAccordionItem>
+          <h2 ngbAccordionHeader>
+            <button
+              ngbAccordionButton
+              class="{{
+                task.done
+                  ? 'text-decoration-line-through '
+                  : 'text-decoration-none '
+              }}"
+            >
+              {{ task.title }}
+            </button>
+          </h2>
+          <div ngbAccordionCollapse>
+            <div
+              ngbAccordionBody
+              class="d-flex justify-content-between flex-row-reverse"
+            >
+              <ng-template>
+                <div class="form-check text-start my-3">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="flex-check-default"
+                    (click)="handleUpdateTaskDone(task)"
+                    [checked]="task.done"
+                  />
+                  <label
+                    class="form-check-label {{
+                      task.done
+                        ? 'text-decoration-line-through '
+                        : 'text-decoration-none '
+                    }}"
+                    for="flex-check-default"
+                    >{{ task.description }}</label
+                  >
+                </div></ng-template
+              >
+
+              <div
+                class="d-flex align-items-center justify-content-center gap-2"
+              >
+                <div
+                  class="bg-primary rounded d-flex align-items-center justify-content-center icon edit"
+                  (click)="handleEditClick(task)"
+                >
+                  <mat-icon>edit</mat-icon>
+                </div>
+                <div class="d-flex align-items-center justify-content-center">
+                  <div
+                    class="rounded d-flex align-items-center justify-content-center icon delete"
+                    (click)="handleDeleteClick(task.id)"
+                  >
+                    <mat-icon>delete_forever</mat-icon>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
