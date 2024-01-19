@@ -38,4 +38,24 @@ export class JwtService {
 
     return undefined;
   }
+
+  deleteTask(taskId: number): Observable<any> {
+    console.log(taskId);
+    return this.http.delete(BASE_URL + `api/tasks/${taskId}`, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
+  updateTask(taskId: number, body: any): Observable<any> {
+    console.log(taskId);
+    return this.http.put(BASE_URL + `api/tasks/${taskId}`, body, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
+  addTask(taskBody: any): Observable<any> {
+    return this.http.post(BASE_URL + 'api/tasks/', taskBody, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
 }
