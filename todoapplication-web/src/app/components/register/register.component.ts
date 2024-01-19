@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BouncingLogoComponent } from '../bouncing-logo/bouncing-logo.component';
-import { JwtService } from '../../service/jwt.service';
+import { JwtService } from '../../service/jwt/jwt.service';
 import {
   FormBuilder,
   FormGroup,

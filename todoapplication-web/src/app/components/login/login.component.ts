@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BouncingLogoComponent } from '../bouncing-logo/bouncing-logo.component';
-import { JwtService } from '../../service/jwt.service';
+import { JwtService } from '../../service/jwt/jwt.service';
 
 @Component({
   selector: 'app-login',
@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit {
 
         localStorage.setItem('email', userEmail);
         localStorage.setItem('jwt', jwtToken);
-        
+
         this.router.navigateByUrl('/app');
       }
     });
