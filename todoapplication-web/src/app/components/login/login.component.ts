@@ -42,8 +42,10 @@ export class LoginComponent implements OnInit {
         console.log;
         const jwtToken = response.jwt;
         const userEmail = this.loginForm.value.email;
+
         localStorage.setItem('email', userEmail);
         localStorage.setItem('jwt', jwtToken);
+        
         this.router.navigateByUrl('/app');
       }
     });
