@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { BsModalService, BsModalRef, ModalModule } from 'ngx-bootstrap/modal';
 import { EditDialogComponent } from '../../shared/modal/edit-dialog/edit-dialog.component';
 import { AddDialogComponent } from '../../shared/modal/add-dialog/add-dialog/add-dialog.component';
+import { Route, Router, Routes } from '@angular/router';
 
 interface Tasks {
   id: number;
@@ -41,16 +42,29 @@ export class DashboardComponent implements OnInit {
   bsModalRef: BsModalRef | undefined;
   taskDone: boolean | undefined;
 
-  constructor(private service: JwtService, private modalService: NgbModal) {}
+  constructor(
+    private route: Router,
+    private service: JwtService,
+    private modalService: NgbModal
+  ) {}
 
   ngOnInit(): void {
     this.getTask();
   }
 
   getTask() {
-    this.service.task().subscribe((res) => {
-      this.tasks = res;
-    });
+    this.service.task().subscribe(
+      (res) => {
+        this.tasks = res;
+
+        console.log(res);
+      },
+      (err) => {
+        if (err) {
+          this.route.navigateByUrl('/');
+        }
+      }
+    );
   }
 
   handleDeleteClick(taskId: number) {
