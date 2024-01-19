@@ -1,5 +1,6 @@
 package br.com.marcocarleti.todoapplication.tasks.controllers;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +32,13 @@ public class TaskController {
 	public Iterable<Task> findAllTasks() {
 		return taskService.findAll();
 	}
-
-	@GetMapping("/tasks/{taskId}")
-
-	public Optional<Task> findTaskById(@PathVariable Long taskId) {
-		return taskService.findById(taskId);
+	
+	@GetMapping("/tasks/{customerEmail}")
+	public List<Task> findTaskByCustomerId(@PathVariable String customerEmail) {
+		return taskService.findByCustomerEmail(customerEmail);
 	}
+
+	
 
 	@PostMapping("/tasks")
 	public void addOneTask(@RequestBody Task task) {

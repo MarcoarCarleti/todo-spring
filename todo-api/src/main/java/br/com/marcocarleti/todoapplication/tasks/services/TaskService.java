@@ -1,5 +1,6 @@
 package br.com.marcocarleti.todoapplication.tasks.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,10 @@ public class TaskService implements CustomCrudRepository<Task, Long> {
 	public boolean existsById(Long id) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	public List<Task> findByCustomerEmail(String Email) {
+		return this.taskrepository.findByCustomerEmail(Email);
 	}
 
 	@Override
