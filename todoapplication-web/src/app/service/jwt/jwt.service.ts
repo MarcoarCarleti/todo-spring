@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 const BASE_URL = ['http://localhost:8080/'];
@@ -8,7 +9,7 @@ const BASE_URL = ['http://localhost:8080/'];
   providedIn: 'root',
 })
 export class JwtService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   register(signRequest: any): Observable<any> {
     return this.http.post(BASE_URL + 'signup', signRequest);
@@ -33,7 +34,7 @@ export class JwtService {
       console.log(jwtToken);
       return new HttpHeaders().set('Authorization', 'Bearer ' + jwtToken);
     } else {
-      alert('jwt not found');
+      this.router.navigateByUrl('/');
     }
 
     return undefined;
