@@ -1,5 +1,6 @@
 package br.com.marcocarleti.todoapplication.tasks.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,7 +21,21 @@ public class Customer {
 	
 	private String email;
 	
+	@Column(name = "admin")
+	private Boolean admin;
+
+    public Boolean isAdmin() {
+        return admin != null && admin;
+    }
 	
+	public Boolean getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(Boolean admin) {
+		this.admin = admin;
+	}
+
 	public Long getId() {
 		return id;
 	}

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,9 +29,14 @@ public class TaskController {
 	@Autowired
 	private TaskService taskService;
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/tasks")
 	public Iterable<Task> findAllTasks() {
+		
+		
 		return taskService.findAll();
+		
+		
 	}
 	
 	@GetMapping("/tasks/{customerEmail}")

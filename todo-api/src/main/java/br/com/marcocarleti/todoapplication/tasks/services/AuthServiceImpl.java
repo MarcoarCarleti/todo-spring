@@ -24,6 +24,8 @@ public class AuthServiceImpl implements AuthService {
 			return null;
 		}
 		
+	
+		
 		Customer customer = new Customer();
 		BeanUtils.copyProperties(signupRequest, customer);
 		
