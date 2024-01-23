@@ -34,4 +34,6 @@ public class CustomerServiceImpl implements UserDetailsService {
 
         return new CustomUserDetails(customer.getEmail(), customer.getPassword(), authorities, customer.isAdmin(), roles);
     }
+
+   
 }

@@ -1,5 +1,5 @@
 <main class="w-100 m-auto form-container">
-  <form [formGroup]="loginForm" (ngSubmit)="submitForm()">
+  <form [formGroup]="loginForm">
     <app-bouncing-logo></app-bouncing-logo>
 
     <h1 class="h3 mb-3 fw-normal">Fazer Login</h1>
@@ -17,13 +17,26 @@
 
     <div class="form-floating">
       <input
-        type="password"
-        class="form-control password-input"
+        [type]="password"
+        class="form-control password-input position-relative"
         id="floatingInput"
         placeholder="Senha"
         formControlName="password"
       />
       <label for="floatingInput">Senha</label>
+
+      <button
+        (click)="showPassword()"
+        class="position-absolute bg-transparent border-0"
+        style="top: 1rem; right: 1rem"
+      >
+        <i class="fa fa-eye text-white" aria-hidden="true" *ngIf="!show"></i>
+        <i
+          class="fa fa-eye-slash text-white"
+          aria-hidden="true"
+          *ngIf="show"
+        ></i>
+      </button>
     </div>
 
     <div class="form-check text-start my-3">
@@ -33,10 +46,18 @@
       >
     </div>
 
-    <button class="btn btn-primary w-100 mb-3" [disabled]="loginForm.invalid">
+    <button
+      class="btn btn-primary w-100 mb-3"
+      type="submit"
+      [disabled]="loginForm.invalid"
+      (click)="submitForm()"
+    >
       Entrar
     </button>
 
     <span>Não é usuário? <a href="/register">Cadastrar-se</a></span>
+    <div class="d-flex align-items-center mt-2">
+      <a href="">Esqueci minha senha</a>
+    </div>
   </form>
 </main>
