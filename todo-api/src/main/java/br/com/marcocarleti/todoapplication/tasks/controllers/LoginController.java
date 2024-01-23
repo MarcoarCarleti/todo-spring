@@ -1,6 +1,7 @@
 package br.com.marcocarleti.todoapplication.tasks.controllers;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,41 +18,44 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.marcocarleti.todoapplication.tasks.dto.CustomUserDetails;
 import br.com.marcocarleti.todoapplication.tasks.dto.LoginRequest;
 import br.com.marcocarleti.todoapplication.tasks.dto.LoginResponse;
 import br.com.marcocarleti.todoapplication.tasks.services.jwt.CustomerServiceImpl;
 import br.com.marcocarleti.todoapplication.tasks.utils.JwtUtil;
 
 @RestController
-@RequestMapping(value ="/login", 
-		  consumes = MediaType.APPLICATION_JSON_VALUE, 
-		  produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin(origins = "http://localhost:4200/*")
+@RequestMapping(value = "/login", 
+                consumes = MediaType.APPLICATION_JSON_VALUE, 
+                produces = MediaType.APPLICATION_JSON_VALUE)
+@CrossOrigin(origins = "http://localhost:4200")
 public class LoginController {
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
-	
-	@Autowired
-	private CustomerServiceImpl customerServiceImpl;
-	
-	@Autowired
-	private JwtUtil jwtUtil;
-	
-	 @PostMapping
-	    public LoginResponse login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) throws IOException {
-	        try {
-	            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-	        } catch (BadCredentialsException e) {
-	            throw new BadCredentialsException("Incorrect email or password.");
-	        } catch (DisabledException disabledException) {
-	            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Customer is not activated");
-	            return null;
-	        }
-	        final UserDetails userDetails = customerServiceImpl.loadUserByUsername(loginRequest.getEmail());
-	        final String jwt = jwtUtil.generateToken(userDetails.getUsername());
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-	        return new LoginResponse(jwt);
-	    }
-	
+    @Autowired
+    private CustomerServiceImpl customerServiceImpl;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @PostMapping
+    public LoginResponse login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) throws IOException {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+        } catch (BadCredentialsException e) {
+            throw new BadCredentialsException("Incorrect email or password.");
+        } catch (DisabledException disabledException) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Customer is not activated");
+            return null;
+        }
+        
+        final UserDetails userDetails = customerServiceImpl.loadUserByUsername(loginRequest.getEmail());
+        final List<String> roles = ((CustomUserDetails) userDetails).getRoles();
+        final String jwt = jwtUtil.generateToken(userDetails.getUsername(), roles);
+        Boolean isAdmin = ((CustomUserDetails) userDetails).getAdmin();
+
+        return new LoginResponse(jwt, isAdmin);
+    }
 }

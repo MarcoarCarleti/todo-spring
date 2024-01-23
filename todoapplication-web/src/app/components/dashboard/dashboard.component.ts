@@ -13,12 +13,29 @@ import { BsModalService, BsModalRef, ModalModule } from 'ngx-bootstrap/modal';
 import { EditDialogComponent } from '../../shared/modal/edit-dialog/edit-dialog.component';
 import { AddDialogComponent } from '../../shared/modal/add-dialog/add-dialog/add-dialog.component';
 import { Route, Router, Routes } from '@angular/router';
+import { MatSelectModule } from '@angular/material/select';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+
+import { MatInputModule } from '@angular/material/input';
 
 interface Tasks {
   id: number;
   title: string;
   description: string;
   done: boolean;
+  customerEmail: string;
+}
+
+interface Filters {
+  value: string;
+  viewValue: string;
 }
 
 @Component({
@@ -35,25 +52,154 @@ interface Tasks {
     ModalModule,
     EditDialogComponent,
     NgbModalModule,
+    MatSelectModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    ReactiveFormsModule,
   ],
 })
 export class DashboardComponent implements OnInit {
   tasks!: Tasks[];
+  filteredTasks!: Tasks[];
   bsModalRef: BsModalRef | undefined;
   taskDone: boolean | undefined;
+  admin: boolean | undefined;
+  form!: FormGroup;
+
+  selectedValue!: string;
+  selectedFilter: any = '';
+
+  filters: Filters[] = [
+    { value: '', viewValue: 'Todos' },
+    { value: 'true', viewValue: 'Completos' },
+    { value: 'false', viewValue: 'Incompletos' },
+  ];
 
   constructor(
     private route: Router,
     private service: JwtService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
-    this.getTask();
+    this.admin = localStorage.getItem('admin') === 'true' ? true : false;
+
+    this.form = this.fb.group({
+      filter: ['', Validators.required],
+    });
+
+    if (this.admin) {
+      this.getAllTasks();
+    } else {
+      this.getTask();
+    }
+    setTimeout(() => {
+      this.handleFilterChange();
+    }, 500);
+  }
+
+  handleFilterTextChange() {
+    // if (this.form.value.filter.trim() === '') {
+    //   if (
+    //     this.selectedFilter === undefined ||
+    //     this.selectedFilter === 'todos-0'
+    //   ) {
+    //     const filteredTasks = this.tasks.map((task) => {
+    //       console.log(task);
+    //       return task;
+    //     });
+    //     this.filteredTasks = filteredTasks;
+    //   } else {
+    //     const completedTask =
+    //       this.selectedFilter === 'completos-1' ? true : false;
+    //     const filteredTasks = this.tasks.filter((task) => {
+    //       console.log(task.done === completedTask);
+    //       return task.done === completedTask;
+    //     });
+    //     this.filteredTasks = filteredTasks;
+    //   }
+    // } else {
+    //   // Caso contrário, filtrar as tarefas com base no valor do filtro
+    //   this.filteredTasks = this.filteredTasks.filter((task) => {
+    //     return task.title
+    //       .toLowerCase()
+    //       .includes(this.form.value.filter.toLowerCase());
+    //   });
+    // }
+
+    if (this.admin) {
+      this.service.getAllTasks(this.form.value.filter).subscribe(
+        (res) => {
+          this.tasks = res;
+
+          console.log(res);
+        },
+        (err) => {}
+      );
+    } else {
+      this.service
+        .getTasksByCustomerEmailAndTitle(this.form.value.filter)
+        .subscribe((res) => {
+          this.tasks = res;
+        });
+    }
+  }
+
+  handleFilterChange() {
+    if (this.admin) {
+      this.service.getAllTasksByDone(this.selectedFilter).subscribe(
+        (res) => {
+          this.tasks = res;
+          console.log(res);
+        },
+        (err) => {
+          if (err) {
+            this.route.navigateByUrl('/');
+          }
+        }
+      );
+      console.log(this.selectedFilter);
+    } else {
+      console.log(this.selectedFilter);
+
+      this.service.task(this.selectedFilter).subscribe(
+        (res) => {
+          this.tasks = res;
+
+          console.log(res);
+        },
+        (err) => {
+          if (err) {
+            this.route.navigateByUrl('/');
+          }
+        }
+      );
+    }
   }
 
   getTask() {
-    this.service.task().subscribe(
+    const completedTask =
+      this.selectedFilter === 'completos-1' ? 'true' : 'false';
+
+    this.service.task(completedTask).subscribe(
+      (res) => {
+        this.tasks = res;
+
+        console.log(res);
+      },
+      (err) => {
+        if (err) {
+          this.route.navigateByUrl('/');
+        }
+      }
+    );
+  }
+
+  getAllTasks() {
+    this.service.getAllTasks(this.form.value.filter).subscribe(
       (res) => {
         this.tasks = res;
 
@@ -69,7 +215,11 @@ export class DashboardComponent implements OnInit {
 
   handleDeleteClick(taskId: number) {
     this.service.deleteTask(taskId).subscribe(() => {
-      this.getTask();
+      if (this.admin) {
+        this.getAllTasks();
+      } else {
+        this.getTask();
+      }
     });
   }
 
@@ -90,7 +240,13 @@ export class DashboardComponent implements OnInit {
     this.taskDone = taskObject.done;
 
     this.service.updateTask(task.id, taskObject).subscribe(() => {
-      this.getTask();
+      if (this.admin) {
+        this.getAllTasks();
+        location.reload();
+      } else {
+        this.getTask();
+        location.reload();
+      }
     });
   }
 

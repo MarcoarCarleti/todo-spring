@@ -1,6 +1,5 @@
 package br.com.marcocarleti.todoapplication.tasks.entities;
 
-import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -69,7 +68,7 @@ public class Task {
 		this.id = id;
 	}
 
-	public String CustomerEmail() {
+	public String getCustomerEmail() {
 		return customerEmail;
 	}
 

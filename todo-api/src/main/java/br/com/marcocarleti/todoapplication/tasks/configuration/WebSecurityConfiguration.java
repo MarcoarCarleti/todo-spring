@@ -29,27 +29,18 @@ public class WebSecurityConfiguration implements WebMvcConfigurer {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
 		return security.csrf().disable().cors().and()
-				.authorizeRequests()
-				.antMatchers("/signup", "/login").permitAll()
-				.and()
-				.authorizeRequests()
-				.antMatchers("/api/**")
-				.authenticated()
-				.and()
-				.sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-				.and()
-				.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
-				.build();
+	            .authorizeRequests()
+	            .antMatchers("/signup", "/login").permitAll()
+	            .antMatchers("/api/tasks/filterByTitle").hasRole("ADMIN")
+	            .antMatchers("/api/tasks/filterByDone").hasRole("ADMIN")
+	            .antMatchers("/api/**").authenticated()
+	            .and()
+	            .sessionManagement()
+	            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+	            .and()
+	            .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+	            .build();
 	}
-	
-	@Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-            .allowedOrigins("http://localhost:4200/*")
-            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT");
-    }
-	
 	
 	
 	@Bean

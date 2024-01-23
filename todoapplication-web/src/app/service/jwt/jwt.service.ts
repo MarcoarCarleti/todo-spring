@@ -19,10 +19,36 @@ export class JwtService {
     return this.http.post(BASE_URL + 'login', loginRequest);
   }
 
-  task(): Observable<any> {
-    const costumerEmail = localStorage.getItem('email');
+  task(done: string): Observable<any> {
+    const customerEmail = localStorage.getItem('email');
 
-    return this.http.get(BASE_URL + `api/tasks/${costumerEmail}`, {
+    return this.http.get(
+      BASE_URL + `api/tasks/done/${customerEmail}?done=${done}`,
+      {
+        headers: this.createAuthorizationHeader(),
+      }
+    );
+  }
+
+  getTasksByCustomerEmailAndTitle(title: string): Observable<any> {
+    const customerEmail = localStorage.getItem('email');
+
+    return this.http.get(
+      BASE_URL + `api/tasks/customer/${customerEmail}?title=${title}`,
+      {
+        headers: this.createAuthorizationHeader(),
+      }
+    );
+  }
+
+  getAllTasksByDone(done: string): Observable<any> {
+    return this.http.get(BASE_URL + `api/tasks/filterByDone?done=${done}`, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
+  getAllTasks(title: string): Observable<any> {
+    return this.http.get(BASE_URL + `api/tasks/filterByTitle?title=${title}`, {
       headers: this.createAuthorizationHeader(),
     });
   }

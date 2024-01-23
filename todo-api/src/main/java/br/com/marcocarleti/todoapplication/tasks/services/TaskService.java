@@ -33,7 +33,7 @@ public class TaskService implements CustomCrudRepository<Task, Long> {
 	@Override
 	public Optional<Task> findById(Long id) {
 		// TODO Auto-generated method stub
-		return Optional.of(this.taskrepository.findById(id).orElseThrow(() -> new TaskNotFoundException("Não foi possível encontrar uma task com o id " + id)));
+		return Optional.of(taskrepository.findById(id).orElseThrow(() -> new TaskNotFoundException("Não foi possível encontrar uma task com o id " + id)));
 	}
 
 	
@@ -45,7 +45,7 @@ public class TaskService implements CustomCrudRepository<Task, Long> {
 	}
 	
 	public List<Task> findByCustomerEmail(String Email) {
-		return this.taskrepository.findByCustomerEmail(Email);
+		return taskrepository.findByCustomerEmail(Email);
 	}
 
 	@Override
@@ -114,8 +114,23 @@ public class TaskService implements CustomCrudRepository<Task, Long> {
 	}
 
 
-
+	public List<Task> findByFilter(String seuValor){
+		
+		return taskrepository.findByFilter(seuValor);
+		
+	}
 	
+	public List<Task> findTasksByDone(boolean done) {
+        return taskrepository.findByDone(done);
+    }
+	
+	public List<Task> getTasksByCustomerEmailAndTitle(String customerEmail, String title) {
+        return taskrepository.findByCustomerEmailAndTitleContaining(customerEmail, title);
+    }
+	
+	public List<Task> findTasksByDoneAndCustomerEmail(Boolean done, String customerEmail) {
+        return taskrepository.findByDoneAndCustomerEmail(done, customerEmail);
+    }
 
 	
 
