@@ -44,7 +44,7 @@ export class AddDialogComponent {
     };
 
     this.service.addTask(body).subscribe(() => {
-      this.service.task();
+      this.service.task('false');
       location.reload();
     });
   }

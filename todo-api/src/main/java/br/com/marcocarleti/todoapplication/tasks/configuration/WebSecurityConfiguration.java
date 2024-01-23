@@ -31,7 +31,8 @@ public class WebSecurityConfiguration implements WebMvcConfigurer {
 		return security.csrf().disable().cors().and()
 	            .authorizeRequests()
 	            .antMatchers("/signup", "/login").permitAll()
-	            .antMatchers("/api/tasks").hasRole("ADMIN") // Acesso apenas para ADMIN
+	            .antMatchers("/api/tasks/filterByTitle").hasRole("ADMIN")
+	            .antMatchers("/api/tasks/filterByDone").hasRole("ADMIN")
 	            .antMatchers("/api/**").authenticated()
 	            .and()
 	            .sessionManagement()

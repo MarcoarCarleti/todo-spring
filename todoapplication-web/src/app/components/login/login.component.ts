@@ -20,6 +20,7 @@ import { JwtService } from '../../service/jwt/jwt.service';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup | any;
+  
 
   constructor(
     private service: JwtService,
@@ -41,10 +42,13 @@ export class LoginComponent implements OnInit {
       if (response.jwt != null) {
         console.log;
         const jwtToken = response.jwt;
+        const isAdmin = response.admin;
+        console.log(isAdmin);
         const userEmail = this.loginForm.value.email;
 
         localStorage.setItem('email', userEmail);
         localStorage.setItem('jwt', jwtToken);
+        localStorage.setItem('admin', isAdmin);
 
         this.router.navigateByUrl('/app');
       }

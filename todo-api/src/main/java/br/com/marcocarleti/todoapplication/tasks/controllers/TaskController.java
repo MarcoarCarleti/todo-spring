@@ -1,7 +1,6 @@
 package br.com.marcocarleti.todoapplication.tasks.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.marcocarleti.todoapplication.tasks.entities.Task;
@@ -29,15 +29,49 @@ public class TaskController {
 	@Autowired
 	private TaskService taskService;
 
-	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("/tasks")
-	public Iterable<Task> findAllTasks() {
-		
-		
-		return taskService.findAll();
-		
-		
+	
+	@GetMapping("/tasks/customer/{customerEmail}")
+	public List<Task> getTasksByCustomerEmailAndTitle(
+	        @PathVariable String customerEmail,
+	        @RequestParam(required = false) String title
+	) {
+	    if (title == null) {
+	        return taskService.findByCustomerEmail(customerEmail);
+	    } else {     
+	        return taskService.getTasksByCustomerEmailAndTitle(customerEmail, title);
+	    }
 	}
+	
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("tasks/filterByTitle")
+    public List<Task> filterTasksByTitle(@RequestParam("title") String title) {
+        
+        return taskService.findByFilter(title);
+    }
+	
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("tasks/filterByDone")
+	 public List<Task> getTasksByDone(@RequestParam(value = "done", required = false) Boolean done) {
+	        if (done != null) {
+	            return taskService.findTasksByDone(done);
+	        } else {
+	           
+	            return (List<Task>) taskService.findAll();
+	        }
+	    }
+	
+	 @GetMapping("tasks/done/{customerEmail}")
+	    public List<Task> getTasksByDoneAndEmail(
+	    		@PathVariable String customerEmail,
+	            @RequestParam(value = "done", required = false) Boolean done
+	            ) {
+	        if (done != null) {
+	        	return taskService.findTasksByDoneAndCustomerEmail(done, customerEmail);
+	        } else {
+	        	return (List<Task>) taskService.findByCustomerEmail(customerEmail);
+	        }
+	    }
+	
 	
 	@GetMapping("/tasks/{customerEmail}")
 	public List<Task> findTaskByCustomerId(@PathVariable String customerEmail) {

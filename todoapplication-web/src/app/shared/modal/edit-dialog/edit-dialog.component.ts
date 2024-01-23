@@ -20,7 +20,7 @@ interface Tasks {
 @Component({
   selector: 'app-edit-dialog',
   standalone: true,
-  imports: [HttpClientModule, ReactiveFormsModule, CommonModule],
+  imports: [HttpClientModule, ReactiveFormsModule],
   templateUrl: './edit-dialog.component.html',
   styleUrl: './edit-dialog.component.css',
   providers: [JwtService],
@@ -41,10 +41,10 @@ export class EditDialogComponent implements OnInit {
       description: [this.task.description, Validators.required],
     });
   }
-  
+
   onSubmit(taskId: number) {
     this.service.updateTask(taskId, this.form.value).subscribe(() => {
-      this.service.task();
+      this.service.task('false');
       location.reload();
     });
   }
