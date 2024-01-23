@@ -17,8 +17,12 @@
     cursor: pointer;
 }
 
+.pdf {
+    background-color: #107c41
+}
+
 .pdf:hover {
-    background-color: #0d7239;
+    background: #185c37;
 }
 
 .edit:hover {
