@@ -28,18 +28,30 @@
 
     <div class="form-floating">
       <input
-        type="password"
-        class="form-control mid-input"
+        [type]="password"
+        class="form-control mid-input position-relative"
         id="floatingInput"
         placeholder="Senha"
         formControlName="password"
       />
       <label for="floatingInput">Senha</label>
+      <button
+        (click)="showPassword()"
+        class="position-absolute bg-transparent border-0"
+        style="top: 1rem; right: 1rem"
+      >
+        <i class="fa fa-eye text-white" aria-hidden="true" *ngIf="!show"></i>
+        <i
+          class="fa fa-eye-slash text-white"
+          aria-hidden="true"
+          *ngIf="show"
+        ></i>
+      </button>
     </div>
 
     <div class="form-floating mb-3">
       <input
-        type="password"
+        [type]="password"
         class="form-control password-input"
         id="floatingInput"
         placeholder="Senha"

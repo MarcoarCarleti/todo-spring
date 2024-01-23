@@ -7,17 +7,21 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [BouncingLogoComponent, ReactiveFormsModule],
+  imports: [BouncingLogoComponent, ReactiveFormsModule, CommonModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
   providers: [JwtService],
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup | any;
+
+  password: string = 'password';
+  show: boolean = false;
 
   constructor(private service: JwtService, private fb: FormBuilder) {}
 
@@ -32,6 +36,16 @@ export class RegisterComponent implements OnInit {
       },
       { validator: this.passwordMathValidator }
     );
+  }
+
+  showPassword() {
+    if (this.password === 'password') {
+      this.password = 'text';
+      this.show = true;
+    } else {
+      this.password = 'password';
+      this.show = false;
+    }
   }
 
   passwordMathValidator(formGroup: FormGroup) {

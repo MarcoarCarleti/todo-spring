@@ -9,18 +9,25 @@ import {
 import { Router } from '@angular/router';
 import { BouncingLogoComponent } from '../bouncing-logo/bouncing-logo.component';
 import { JwtService } from '../../service/jwt/jwt.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   standalone: true,
-  imports: [ReactiveFormsModule, BouncingLogoComponent],
+  imports: [
+    ReactiveFormsModule,
+    BouncingLogoComponent,
+    CommonModule,
+  ],
   styleUrl: './login.component.css',
   providers: [JwtService],
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup | any;
-  
+
+  password: string = 'password';
+  show: boolean = false;
 
   constructor(
     private service: JwtService,
@@ -33,17 +40,25 @@ export class LoginComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
     });
+    console.log(this.password);
+  }
+
+  showPassword() {
+    if (this.password === 'password') {
+      this.password = 'text';
+      this.show = true;
+    } else {
+      this.password = 'password';
+      this.show = false;
+    }
   }
 
   submitForm() {
-    console.log(this.loginForm.value);
-    console.log(this.service.login(this.loginForm.value));
     this.service.login(this.loginForm.value).subscribe((response) => {
       if (response.jwt != null) {
-        console.log;
         const jwtToken = response.jwt;
         const isAdmin = response.admin;
-        console.log(isAdmin);
+
         const userEmail = this.loginForm.value.email;
 
         localStorage.setItem('email', userEmail);
