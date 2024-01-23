@@ -11,9 +11,14 @@
 }
 
 .icon {
+
     width: 2rem;
     height: 2rem;
     cursor: pointer;
+}
+
+.pdf:hover {
+    background-color: #0d7239;
 }
 
 .edit:hover {

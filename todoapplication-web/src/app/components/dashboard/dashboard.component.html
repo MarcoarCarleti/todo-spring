@@ -14,7 +14,7 @@
         </div>
       </div>
 
-      <div class="d-flex gap-2">
+      <div class="d-flex gap-2 align-items-center">
         <form class="overflow-visible">
           <mat-form-field class="overflow-visible">
             <mat-label class="overflow-visible">Filtrar Tarefas</mat-label>
@@ -53,6 +53,15 @@
             </select>
           </mat-form-field>
         </form>
+
+        <div style="padding-bottom: 1rem">
+          <mat-icon
+            (click)="handleEmitRelatorio()"
+            style="background-color: #107c41"
+            class="rounded icon d-flex align-items-center justify-content-center pdf"
+            >file_copy</mat-icon
+          >
+        </div>
       </div>
     </div>
 
