@@ -24,5 +24,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 	
     List<Task> findByDoneAndCustomerEmail(Boolean done, String customerEmail);
 
-
+    @Query("SELECT t FROM Task t WHERE t.customerEmail LIKE %?1%")
+    List<Task> findByFilterCustomerEmail(String customerEmail);
 }

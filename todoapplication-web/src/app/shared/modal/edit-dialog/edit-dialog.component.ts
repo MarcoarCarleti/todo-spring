@@ -29,6 +29,8 @@ export class EditDialogComponent implements OnInit {
   task!: Tasks;
   form!: FormGroup;
 
+  costumerEmail: any = localStorage.getItem('email');
+
   constructor(
     public bsModalRef: BsModalRef,
     private formBuilder: FormBuilder,
@@ -44,7 +46,7 @@ export class EditDialogComponent implements OnInit {
 
   onSubmit(taskId: number) {
     this.service.updateTask(taskId, this.form.value).subscribe(() => {
-      this.service.task('false');
+      this.service.task(this.costumerEmail, 'false');
       location.reload();
     });
   }

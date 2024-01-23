@@ -68,14 +68,19 @@ export class DashboardComponent implements OnInit {
   admin: boolean | undefined;
   form!: FormGroup;
 
-  selectedValue!: string;
-  selectedFilter: any = '';
+  selectedEmail: string = '';
+  selectedFilter: string = '';
 
   filters: Filters[] = [
     { value: '', viewValue: 'Todos' },
     { value: 'true', viewValue: 'Completos' },
     { value: 'false', viewValue: 'Incompletos' },
   ];
+
+  costumerEmail: any = localStorage.getItem('email');
+
+  emails!: Tasks[];
+  uniqueArray!: any[];
 
   constructor(
     private route: Router,
@@ -98,50 +103,37 @@ export class DashboardComponent implements OnInit {
     }
     setTimeout(() => {
       this.handleFilterChange();
+      this.uniqueArray = Array.from(
+        new Set(this.emails.map((obj) => obj.customerEmail))
+      ).map((email) => this.emails.find((obj) => obj.customerEmail === email));
     }, 500);
   }
 
   handleFilterTextChange() {
-    // if (this.form.value.filter.trim() === '') {
-    //   if (
-    //     this.selectedFilter === undefined ||
-    //     this.selectedFilter === 'todos-0'
-    //   ) {
-    //     const filteredTasks = this.tasks.map((task) => {
-    //       console.log(task);
-    //       return task;
-    //     });
-    //     this.filteredTasks = filteredTasks;
-    //   } else {
-    //     const completedTask =
-    //       this.selectedFilter === 'completos-1' ? true : false;
-    //     const filteredTasks = this.tasks.filter((task) => {
-    //       console.log(task.done === completedTask);
-    //       return task.done === completedTask;
-    //     });
-    //     this.filteredTasks = filteredTasks;
-    //   }
-    // } else {
-    //   // Caso contrário, filtrar as tarefas com base no valor do filtro
-    //   this.filteredTasks = this.filteredTasks.filter((task) => {
-    //     return task.title
-    //       .toLowerCase()
-    //       .includes(this.form.value.filter.toLowerCase());
-    //   });
-    // }
-
     if (this.admin) {
-      this.service.getAllTasks(this.form.value.filter).subscribe(
-        (res) => {
-          this.tasks = res;
-
-          console.log(res);
-        },
-        (err) => {}
-      );
+      if (this.selectedEmail !== '') {
+        this.service
+          .getTasksByCustomerEmailAndTitle(
+            this.selectedEmail,
+            this.form.value.filter
+          )
+          .subscribe((res) => {
+            this.tasks = res;
+          });
+      } else {
+        this.service.getAllTasks(this.form.value.filter).subscribe(
+          (res) => {
+            this.tasks = res;
+          },
+          (err) => {}
+        );
+      }
     } else {
       this.service
-        .getTasksByCustomerEmailAndTitle(this.form.value.filter)
+        .getTasksByCustomerEmailAndTitle(
+          this.costumerEmail,
+          this.form.value.filter
+        )
         .subscribe((res) => {
           this.tasks = res;
         });
@@ -150,22 +142,26 @@ export class DashboardComponent implements OnInit {
 
   handleFilterChange() {
     if (this.admin) {
-      this.service.getAllTasksByDone(this.selectedFilter).subscribe(
-        (res) => {
-          this.tasks = res;
-          console.log(res);
-        },
-        (err) => {
-          if (err) {
-            this.route.navigateByUrl('/');
+      if (this.selectedEmail !== '') {
+        this.service
+          .task(this.selectedEmail, this.selectedFilter)
+          .subscribe((res) => {
+            this.tasks = res;
+          });
+      } else {
+        this.service.getAllTasksByDone(this.selectedFilter).subscribe(
+          (res) => {
+            this.tasks = res;
+          },
+          (err) => {
+            if (err) {
+              this.route.navigateByUrl('/');
+            }
           }
-        }
-      );
-      console.log(this.selectedFilter);
+        );
+      }
     } else {
-      console.log(this.selectedFilter);
-
-      this.service.task(this.selectedFilter).subscribe(
+      this.service.task(this.costumerEmail, this.selectedFilter).subscribe(
         (res) => {
           this.tasks = res;
 
@@ -180,15 +176,25 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  handleEmailFilterChange() {
+    if (this.admin) {
+      this.service.filterTaskEmail(this.selectedEmail).subscribe((res) => {
+        this.tasks = res;
+      });
+
+      this.service.getAllTasks(this.form.value.filter).subscribe((res) => {
+        this.emails = res;
+      });
+    }
+  }
+
   getTask() {
     const completedTask =
       this.selectedFilter === 'completos-1' ? 'true' : 'false';
 
-    this.service.task(completedTask).subscribe(
+    this.service.task(this.costumerEmail, completedTask).subscribe(
       (res) => {
         this.tasks = res;
-
-        console.log(res);
       },
       (err) => {
         if (err) {
@@ -202,8 +208,7 @@ export class DashboardComponent implements OnInit {
     this.service.getAllTasks(this.form.value.filter).subscribe(
       (res) => {
         this.tasks = res;
-
-        console.log(res);
+        this.emails = res;
       },
       (err) => {
         if (err) {
@@ -256,7 +261,3 @@ export class DashboardComponent implements OnInit {
     });
   }
 }
-
-// openAccordion() {
-//   this.button.coll
-// }

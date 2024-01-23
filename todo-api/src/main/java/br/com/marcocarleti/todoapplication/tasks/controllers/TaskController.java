@@ -43,6 +43,17 @@ public class TaskController {
 	}
 	
 	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/tasks/customer")
+	public List<Task> filterTasksByCustomerEmail(@RequestParam(required = false) String email){
+		if (email == null || email == "") {
+			return (List<Task>) taskService.findAll();
+		} else {
+			return taskService.findByCustomerEmail(email);
+		}
+	
+	}
+	
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("tasks/filterByTitle")
     public List<Task> filterTasksByTitle(@RequestParam("title") String title) {
         
