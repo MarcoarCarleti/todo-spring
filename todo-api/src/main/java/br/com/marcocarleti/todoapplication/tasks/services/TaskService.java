@@ -17,7 +17,7 @@ public class TaskService implements CustomCrudRepository<Task, Long> {
 
 	@Autowired
 	private TaskRepository taskrepository;
-	
+
 	@Override
 	public <S extends Task> S save(S entity) {
 		// TODO Auto-generated method stub
@@ -29,27 +29,26 @@ public class TaskService implements CustomCrudRepository<Task, Long> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	@Override
 	public Optional<Task> findById(Long id) {
 		// TODO Auto-generated method stub
-		return Optional.of(taskrepository.findById(id).orElseThrow(() -> new TaskNotFoundException("Não foi possível encontrar uma task com o id " + id)));
+		return Optional.of(taskrepository.findById(id)
+				.orElseThrow(() -> new TaskNotFoundException("Não foi possível encontrar uma task com o id " + id)));
 	}
-
-	
 
 	@Override
 	public boolean existsById(Long id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
 	public List<Task> findByCustomerEmail(String Email) {
 		return taskrepository.findByCustomerEmail(Email);
 	}
 
 	@Override
-	public Iterable<Task> findAll() {
+	public List<Task> findAll() {
 		// TODO Auto-generated method stub
 		return taskrepository.findAll();
 	}
@@ -71,71 +70,117 @@ public class TaskService implements CustomCrudRepository<Task, Long> {
 		// TODO Auto-generated method stub
 		return taskrepository.findById(id).map(existingTask -> {
 			taskrepository.delete(existingTask);
-    		return ResponseEntity.noContent().build();
-    	}).orElseGet(() -> ResponseEntity.notFound().build());
+			return ResponseEntity.noContent().build();
+		}).orElseGet(() -> ResponseEntity.notFound().build());
 	}
 
 	@Override
 	public void delete(Task entity) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void deleteAllById(Iterable<? extends Long> ids) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void deleteAll(Iterable<? extends Task> entities) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void deleteAll() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	@Override
 	public ResponseEntity<Task> updateById(Long id, Task updatedTask) {
 		// TODO Auto-generated method stub
 		return taskrepository.findById(id).map(existingTask -> {
-            existingTask.setTitle(updatedTask.getTitle());
-            existingTask.setDescription(updatedTask.getDescription());
-            existingTask.setDone(updatedTask.getDone());
+			existingTask.setTitle(updatedTask.getTitle());
+			existingTask.setDescription(updatedTask.getDescription());
+			existingTask.setDone(updatedTask.getDone());
 
-            Task updated = taskrepository.save(existingTask);
-            return ResponseEntity.ok().body(updated);
-        })
-        .orElseGet(() -> ResponseEntity.notFound().build());
+			Task updated = taskrepository.save(existingTask);
+			return ResponseEntity.ok().body(updated);
+		}).orElseGet(() -> ResponseEntity.notFound().build());
 	}
 
+	public List<Task> findByFilter(String seuValor) {
 
-	public List<Task> findByFilter(String seuValor){
-		
 		return taskrepository.findByFilter(seuValor);
-		
-	}
-	
-	public List<Task> findTasksByDone(boolean done) {
-        return taskrepository.findByDone(done);
-    }
-	
-	public List<Task> getTasksByCustomerEmailAndTitle(String customerEmail, String title) {
-        return taskrepository.findByCustomerEmailAndTitleContaining(customerEmail, title);
-    }
-	
-	public List<Task> findTasksByDoneAndCustomerEmail(Boolean done, String customerEmail) {
-        return taskrepository.findByDoneAndCustomerEmail(done, customerEmail);
-    }
-	
-	public List<Task> findByFilterCustomerEmail(String customerEmail){
-		return taskrepository.findByFilterCustomerEmail(customerEmail);
+
 	}
 
-	
+	public List<Task> findTasksByDone(boolean done) {
+		return taskrepository.findByDone(done);
+	}
+
+	public List<Task> getTasksByCustomerEmailAndTitle(String customerEmail, String title) {
+		return taskrepository.findByCustomerEmailAndTitleContaining(customerEmail, title);
+	}
+
+	public List<Task> findTasksByDoneAndCustomerEmail(Boolean done, String customerEmail) {
+		return taskrepository.findByDoneAndCustomerEmail(done, customerEmail);
+	}
+
+	public List<Task> findTasksByFilter(String customerEmail, Boolean done) {
+		if (customerEmail != null && !customerEmail.isEmpty()) {
+			return taskrepository.findByDoneAndCustomerEmail(done, customerEmail);
+		} else {
+			return taskrepository.findByDone(done);
+		}
+	}
+
+	public byte[] generateTasksReport(String customerEmail, Boolean done) {
+		if (customerEmail == null && done == null || customerEmail.isEmpty() && done == null) {
+			List<Task> tasks = findAll();
+
+			// Injete o RelatorioService
+			RelatorioService relatorioService = new RelatorioService();
+
+			// Chame o método generatePdf na instância de RelatorioService
+			byte[] pdfContent = relatorioService.generatePdf(tasks);
+
+			return pdfContent;
+		}
+
+		else if (done == null) {
+			List<Task> tasks = findByCustomerEmail(customerEmail);
+
+			// Injete o RelatorioService
+			RelatorioService relatorioService = new RelatorioService();
+
+			// Chame o método generatePdf na instância de RelatorioService
+			byte[] pdfContent = relatorioService.generatePdf(tasks);
+
+			return pdfContent;
+		} else if (customerEmail == null || customerEmail.isEmpty()) {
+			List<Task> tasks = findTasksByDone(done);
+
+			// Injete o RelatorioService
+			RelatorioService relatorioService = new RelatorioService();
+
+			// Chame o método generatePdf na instância de RelatorioService
+			byte[] pdfContent = relatorioService.generatePdf(tasks);
+
+			return pdfContent;
+		} else {
+			List<Task> tasks = findTasksByFilter(customerEmail, done);
+
+			// Injete o RelatorioService
+			RelatorioService relatorioService = new RelatorioService();
+
+			// Chame o método generatePdf na instância de RelatorioService
+			byte[] pdfContent = relatorioService.generatePdf(tasks);
+
+			return pdfContent;
+		}
+	}
 
 }

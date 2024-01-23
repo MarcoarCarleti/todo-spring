@@ -109,6 +109,36 @@ export class DashboardComponent implements OnInit {
     }, 500);
   }
 
+  handleEmitRelatorio() {
+    if (this.admin) {
+      return this.service
+        .emitRelatorio(this.selectedEmail, this.selectedFilter)
+        .subscribe(
+          (res) => {
+            const blob = new Blob([res], { type: 'application/pdf' });
+            const url = window.URL.createObjectURL(blob);
+            window.open(url, '_blank');
+          },
+          (error) => {
+            console.error('Erro na chamada da API:', error);
+          }
+        );
+    } else {
+      return this.service
+        .emitRelatorio(this.costumerEmail, this.selectedFilter)
+        .subscribe(
+          (res) => {
+            const blob = new Blob([res], { type: 'application/pdf' });
+            const url = window.URL.createObjectURL(blob);
+            window.open(url, '_blank');
+          },
+          (error) => {
+            console.error('Erro na chamada da API:', error);
+          }
+        );
+    }
+  }
+
   handleFilterTextChange() {
     if (this.admin) {
       if (this.selectedEmail !== '') {

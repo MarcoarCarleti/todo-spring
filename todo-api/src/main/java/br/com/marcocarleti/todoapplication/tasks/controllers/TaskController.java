@@ -3,6 +3,9 @@ package br.com.marcocarleti.todoapplication.tasks.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,6 +31,21 @@ public class TaskController {
 
 	@Autowired
 	private TaskService taskService;
+	
+	@GetMapping("/tasks/report")
+	public ResponseEntity<byte[]> getTasksReport(
+	        @RequestParam("customerEmail") String customerEmail,
+	        @RequestParam(required = false) Boolean done
+	) {
+	    byte[] pdfContent = taskService.generateTasksReport(customerEmail, done);
+
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.APPLICATION_PDF);
+	    headers.setContentDispositionFormData("attachment", "tasks_report.pdf");
+	    headers.setContentLength(pdfContent.length);
+
+	    return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
+	}
 
 	
 	@GetMapping("/tasks/customer/{customerEmail}")

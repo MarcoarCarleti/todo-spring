@@ -20,11 +20,17 @@ export class JwtService {
   }
 
   task(email: string, done: string): Observable<any> {
+    return this.http.get(BASE_URL + `api/tasks/done/${email}?done=${done}`, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
 
+  emitRelatorio(customerEmail: string, done: string): Observable<any> {
     return this.http.get(
-      BASE_URL + `api/tasks/done/${email}?done=${done}`,
+      BASE_URL + `api/tasks/report?customerEmail=${customerEmail}&done=${done}`,
       {
         headers: this.createAuthorizationHeader(),
+        responseType: 'arraybuffer' as 'json',
       }
     );
   }
