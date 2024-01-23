@@ -2,7 +2,7 @@
   <div class="position-absolute" style="top: 7rem; min-width: 560px">
     <app-header></app-header>
     <div class="d-flex flex-row justify-content-between">
-      <div class="d-flex flex-row gap-2">
+      <div class="d-flex flex-row gap-2 mx-2">
         <h3 class="pb-3" style="width: fit-content">
           {{ admin ? "Tarefas" : "Minhas Tasks" }}
         </h3>
@@ -14,25 +14,46 @@
         </div>
       </div>
 
-      <form class="overflow-visible">
-        <mat-form-field class="overflow-visible">
-          <mat-label class="overflow-visible">Filtrar Tarefas</mat-label>
-          <select
-            class="overflow-visible"
-            matNativeControl
-            [(ngModel)]="selectedFilter"
-            name="filter"
-            (ngModelChange)="handleFilterChange()"
-          >
-            <option class="overflow-visible" value="" selected></option>
-            @for (filter of filters; track filter) {
-            <option class="overflow-visible" [value]="filter.value">
-              {{ filter.viewValue }}
-            </option>
-            }
-          </select>
-        </mat-form-field>
-      </form>
+      <div class="d-flex gap-2">
+        <form class="overflow-visible">
+          <mat-form-field class="overflow-visible">
+            <mat-label class="overflow-visible">Filtrar Tarefas</mat-label>
+            <select
+              class="overflow-visible"
+              matNativeControl
+              [(ngModel)]="selectedFilter"
+              name="filter"
+              (ngModelChange)="handleFilterChange()"
+            >
+              @for (filter of filters; track filter) {
+              <option class="overflow-visible" [value]="filter.value">
+                {{ filter.viewValue }}
+              </option>
+              }
+            </select>
+          </mat-form-field>
+        </form>
+
+        <form class="overflow-visible" *ngIf="admin">
+          <mat-form-field class="overflow-visible">
+            <mat-label class="overflow-visible">Filtrar Emails</mat-label>
+            <select
+              class="overflow-visible"
+              matNativeControl
+              [(ngModel)]="selectedEmail"
+              name="filter"
+              (ngModelChange)="handleEmailFilterChange()"
+            >
+              <option class="overflow-visible" value="" selected>Todos</option>
+              @for (email of uniqueArray; track email) {
+              <option class="overflow-visible" [value]="email.customerEmail">
+                {{ email.customerEmail }}
+              </option>
+              }
+            </select>
+          </mat-form-field>
+        </form>
+      </div>
     </div>
 
     <form action="" [formGroup]="form">
@@ -52,7 +73,7 @@
     </form>
 
     <div class="d-flex flex-column-reverse">
-      <div ngbAccordion *ngFor="let task of tasks" class="accordion-b">
+      <div ngbAccordion *ngFor="let task of tasks" class="accordion-b w-100">
         <div ngbAccordionItem>
           <h2 ngbAccordionHeader>
             <button

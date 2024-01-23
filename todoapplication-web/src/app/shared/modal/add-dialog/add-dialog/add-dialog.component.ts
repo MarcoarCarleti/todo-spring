@@ -19,6 +19,7 @@ import { Router } from '@angular/router';
 })
 export class AddDialogComponent {
   form!: FormGroup;
+  costumerEmail: any = localStorage.getItem('email');
 
   constructor(
     public bsModalRef: BsModalRef,
@@ -44,7 +45,7 @@ export class AddDialogComponent {
     };
 
     this.service.addTask(body).subscribe(() => {
-      this.service.task('false');
+      this.service.task(this.costumerEmail, 'false');
       location.reload();
     });
   }

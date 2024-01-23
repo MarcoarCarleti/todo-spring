@@ -19,26 +19,32 @@ export class JwtService {
     return this.http.post(BASE_URL + 'login', loginRequest);
   }
 
-  task(done: string): Observable<any> {
-    const customerEmail = localStorage.getItem('email');
+  task(email: string, done: string): Observable<any> {
 
     return this.http.get(
-      BASE_URL + `api/tasks/done/${customerEmail}?done=${done}`,
+      BASE_URL + `api/tasks/done/${email}?done=${done}`,
       {
         headers: this.createAuthorizationHeader(),
       }
     );
   }
 
-  getTasksByCustomerEmailAndTitle(title: string): Observable<any> {
-    const customerEmail = localStorage.getItem('email');
-
+  getTasksByCustomerEmailAndTitle(
+    email: string,
+    title: string
+  ): Observable<any> {
     return this.http.get(
-      BASE_URL + `api/tasks/customer/${customerEmail}?title=${title}`,
+      BASE_URL + `api/tasks/customer/${email}?title=${title}`,
       {
         headers: this.createAuthorizationHeader(),
       }
     );
+  }
+
+  filterTaskEmail(email: string): Observable<any> {
+    return this.http.get(BASE_URL + `api/tasks/customer?email=${email}`, {
+      headers: this.createAuthorizationHeader(),
+    });
   }
 
   getAllTasksByDone(done: string): Observable<any> {
@@ -51,19 +57,6 @@ export class JwtService {
     return this.http.get(BASE_URL + `api/tasks/filterByTitle?title=${title}`, {
       headers: this.createAuthorizationHeader(),
     });
-  }
-
-  private createAuthorizationHeader() {
-    const jwtToken = localStorage.getItem('jwt');
-
-    if (jwtToken) {
-      console.log(jwtToken);
-      return new HttpHeaders().set('Authorization', 'Bearer ' + jwtToken);
-    } else {
-      this.router.navigateByUrl('/');
-    }
-
-    return undefined;
   }
 
   deleteTask(taskId: number): Observable<any> {
@@ -84,5 +77,18 @@ export class JwtService {
     return this.http.post(BASE_URL + 'api/tasks/', taskBody, {
       headers: this.createAuthorizationHeader(),
     });
+  }
+
+  private createAuthorizationHeader() {
+    const jwtToken = localStorage.getItem('jwt');
+
+    if (jwtToken) {
+      console.log(jwtToken);
+      return new HttpHeaders().set('Authorization', 'Bearer ' + jwtToken);
+    } else {
+      this.router.navigateByUrl('/');
+    }
+
+    return undefined;
   }
 }

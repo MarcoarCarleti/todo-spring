@@ -131,6 +131,10 @@ public class TaskService implements CustomCrudRepository<Task, Long> {
 	public List<Task> findTasksByDoneAndCustomerEmail(Boolean done, String customerEmail) {
         return taskrepository.findByDoneAndCustomerEmail(done, customerEmail);
     }
+	
+	public List<Task> findByFilterCustomerEmail(String customerEmail){
+		return taskrepository.findByFilterCustomerEmail(customerEmail);
+	}
 
 	
 
